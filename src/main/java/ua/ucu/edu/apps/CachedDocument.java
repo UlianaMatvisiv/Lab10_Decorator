@@ -3,12 +3,7 @@ package ua.ucu.edu.apps;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 
 @AllArgsConstructor
@@ -17,32 +12,33 @@ public class CachedDocument implements Document {
 
     @Override
     public String parse() throws SQLException, IOException {
-        try (Connection connect = DriverManager
+        try (Connection connection = DriverManager
                     .getConnection("jdbc:sqlite:cache.sqlite");
-             Statement statement = connect.createStatement()) {
-            statement.execute(
-                "CREATE TABLE IF NOT EXISTS documents " +
-                "(id INTEGER PRIMARY KEY, gcsPath TEXT, text TEXT)"
+             Statement sqlStatement = connection.createStatement()) {
+                sqlStatement.execute(
+                "CREATE TABLE IF NOT EXISTS documents "
+                + "(id INTEGER PRIMARY KEY, gcsPath TEXT, text TEXT)"
             );
             
-            String text = getCachedText(connect);
+            String text = getCachedText(connection);
             if (text != null) {
                 return text;
             }
             text = new SmartDocument(gcsPath).parse();
-            cacheText(connect, text);
+            cacheText(connection, text);
             return text;
         }
     }
 
-    private String getCachedText(Connection connect) throws SQLException {
-        try (PreparedStatement pstatement = connect
-        .prepareStatement("SELECT text FROM documents WHERE gcsPath = ?")) {
-            pstatement.setString(1, gcsPath);
+    private String getCachedText(Connection connection) throws SQLException {
+        try (PreparedStatement preparedStatement = connection
+        .prepareStatement("SELECT text FROM"
+        + "documents WHERE gcsPath = ?")) {
+            preparedStatement.setString(1, gcsPath);
 
-            try (ResultSet resultset = pstatement.executeQuery()) {
-                if (resultset.next()) {
-                    return resultset.getString("text");
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString("text");
                 }
             }
         }
@@ -50,11 +46,12 @@ public class CachedDocument implements Document {
     }
 
     private void cacheText(Connection connect, String text) throws SQLException {
-        try (PreparedStatement pstatement = connect
-        .prepareStatement("INSERT INTO documents (gcsPath, text) VALUES (?, ?)")) {
-            pstatement.setString(1, gcsPath);
-            pstatement.setString(2, text);
-            pstatement.executeUpdate();
+        try (PreparedStatement preparedStatement = connect
+        .prepareStatement("INSERT INTO documents"
+        + "(gcsPath, text) VALUES (?, ?)")) {
+            preparedStatement.setString(1, gcsPath);
+            preparedStatement.setString(2, text);
+            preparedStatement.executeUpdate();
         }
     }
 }

@@ -1,7 +1,7 @@
 package ua.ucu.edu.apps;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class TimedDocument implements Document {
     private final Document document;
@@ -15,8 +15,8 @@ public class TimedDocument implements Document {
         String result = document.parse();
         long endTime = System.currentTimeMillis();
         long duration = (endTime - startTime);
-        System.out.println("Parsing time: " + 
-        Long.toString(duration) + " milliseconds");
+        System.out.println("Parsing time: " 
+        + Long.toString(duration) + " milliseconds");
         return result;
     }
 }
