@@ -14,8 +14,9 @@ public class TimedDocument implements Document {
         long startTime = System.currentTimeMillis();
         String result = document.parse();
         long endTime = System.currentTimeMillis();
-        long duration =(endTime - startTime);
-        System.out.println("Parsing time: " + Long.toString(duration) + " milliseconds");
+        long duration = (endTime - startTime);
+        System.out.println("Parsing time: " + 
+        Long.toString(duration) + " milliseconds");
         return result;
     }
 }

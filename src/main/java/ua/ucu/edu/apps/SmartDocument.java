@@ -10,8 +10,8 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.cloud.vision.v1.ImageSource;
 import com.google.cloud.vision.v1.TextAnnotation;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +19,7 @@ import java.util.List;
 public class SmartDocument implements Document {
     public String gcsPath;
 
-    @SneakyThrows
-    public String parse() {
+    public String parse() throws IOException {
         List<AnnotateImageRequest> requests = new ArrayList<>();
 
         ImageSource imgSource = ImageSource.newBuilder().setGcsImageUri(gcsPath).build();
