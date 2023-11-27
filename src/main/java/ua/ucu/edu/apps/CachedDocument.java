@@ -24,8 +24,8 @@ public class CachedDocument implements Document {
         }
     }
 
-    private String getCachedText(Connection CONNECTION) throws SQLException {
-        try (PreparedStatement STATEMENT = CONNECTION
+    private String getCachedText(Connection connection) throws SQLException {
+        try (PreparedStatement STATEMENT = connection
         .prepareStatement("SELECT text FROM"
         + "documents WHERE gcsPath = ?")) {
             STATEMENT.setString(1, gcsPath);
