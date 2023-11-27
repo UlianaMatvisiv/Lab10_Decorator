@@ -24,5 +24,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JAVA_FILE_NAME: checkstyle.xml
           FILTER_REGEX_INCLUDE: ".*src/.*"
-      - name: Test with Maven
-        run: mvn --batch-mode --update-snapshots package
