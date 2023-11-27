@@ -8,8 +8,8 @@ public class CachedDocument implements Document {
     public String parse() throws SQLException, IOException {
         try (Connection CONNECTION = DriverManager
                     .getConnection("jdbc:sqlite:cache.sqlite");
-             Statement SQLStatement = CONNECTION.createStatement()) {
-                SQLStatement.execute(
+             Statement SQLSTATEMENT = CONNECTION.createStatement()) {
+                SQLSTATEMENT.execute(
                 "CREATE TABLE IF NOT EXISTS documents "
                 + "(id INTEGER PRIMARY KEY, gcsPath TEXT, text TEXT)"
             );
@@ -30,9 +30,9 @@ public class CachedDocument implements Document {
         + "documents WHERE gcsPath = ?")) {
             STATEMENT.setString(1, gcsPath);
 
-            try (ResultSet resultSet = STATEMENT.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("text");
+            try (ResultSet RESULT = STATEMENT.executeQuery()) {
+                if (RESULT.next()) {
+                    return RESULT.getString("text");
                 }
             }
         }
@@ -40,8 +40,8 @@ public class CachedDocument implements Document {
     }
 
     private void cacheText(
-        Connection CONNECTION, String text) throws SQLException {
-        try (PreparedStatement STATEMENT = CONNECTION.prepareStatement(
+        Connection connection, String text) throws SQLException {
+        try (PreparedStatement STATEMENT = connection.prepareStatement(
         "INSERT INTO documents"
         + "(gcsPath, text) VALUES (?, ?)")) {
             STATEMENT.setString(1, gcsPath);
