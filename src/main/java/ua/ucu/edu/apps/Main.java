@@ -1,8 +1,5 @@
 package ua.ucu.edu.apps;
 
-import java.io.IOException;
-import java.sql.*;
-
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
         Document sd = new SmartDocument(

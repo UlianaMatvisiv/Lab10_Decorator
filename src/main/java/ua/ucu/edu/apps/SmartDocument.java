@@ -43,7 +43,8 @@ public class SmartDocument implements Document {
 
         try (ImageAnnotatorClient annClient = ImageAnnotatorClient
         .create()) {
-            BatchAnnotateImagesResponse response = annClient.batchAnnotateImages(requests);
+            BatchAnnotateImagesResponse response = annClient
+            .batchAnnotateImages(requests);
             List<AnnotateImageResponse> responses = response.getResponsesList();
             annClient.close();
 

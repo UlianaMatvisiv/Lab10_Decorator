@@ -1,8 +1,5 @@
 package ua.ucu.edu.apps;
 
-import java.io.IOException;
-import java.sql.*;
-
 public class TimedDocument implements Document {
     private final Document document;
     public TimedDocument(Document document) {
